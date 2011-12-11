@@ -51,10 +51,10 @@ $gplus = json_decode($content);
 <?php
 foreach($gplus->items as $item) { ?>
 	<item>
-	<title><?php echo $item->title; ?></title>
+	<title><?php echo htmlspecialchars($item->title); ?></title>
 	<link><?php echo $item->url; ?></link>
 	<description>
-		<?php echo $item->object->content ?>
+		<?php echo htmlspecialchars($item->object->content); ?>
 	</description>
 	</item>
 <?php } ?>
