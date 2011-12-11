@@ -1,9 +1,6 @@
 <?php
 // your cache file, make sure it's writable
-$cacheFile = './cache/gplus-cache';
-
-// initialise cached flag
-$cacheLoaded = false;
+$cacheFile = '/tmp/gplus-cache';
 
 // 30 minutes Cache Time
 $cacheTime = 1800;
@@ -17,37 +14,23 @@ $key = 'XXX';
 // your Google+ Activity Stream, get more info: https://developers.google.com/+/api/latest/activities
 $url = 'https://www.googleapis.com/plus/v1/people/' . $googlePlusID . '/activities/public?alt=json&pp=1&key=';
 
-// no cachefile? generate it
-if(!file_exists($cacheFile)) {
-    $handle = fopen($cacheFile, 'a');
-    fclose($handle);
-    if(!$handle) {
-        die('cache creation failed');
-    }
-// cache file? use it
-} else {
-    // cache validation
-    if((time() - filemtime($cacheFile) < $cacheTime)
-    && filesize($cacheFile)>0
-    ) {
-        $content = file_get_contents($cacheFile);
-        $cacheLoaded = true;
-    }
+// got cachefile?
+$lmod = @filemtime($cacheFile);
+if( !isset($_GET['purgeCache']) &&
+    $lmod &&
+    filesize($cacheFile) &&
+    (time() - $lmod < $cacheTime)){
+    $content = file_get_contents($cacheFile);
+}else{
+    $content = file_get_contents($url.$key);
+    if($content) file_put_contents($cacheFile,$content);
 }
+if(!$content) die('Failed to load G+ data');
 
-// no cache, reload
-if($cacheLoaded == false
-|| isset($_GET['purgeCache'])) {
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url.$key);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $content = curl_exec($ch);
-    curl_close($ch);
-    file_put_contents($cacheFile, $content);
-}
 $gplus = json_decode($content);
+if(!$gplus) die('Failed to decode G+ data');
+
+
 ?>
 <?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <rss version="2.00">
