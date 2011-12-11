@@ -12,7 +12,7 @@ $cacheTime = 1800;
 $googlePlusID = '113799277735885972934';
 
 // your Google+ API key, obtain your's here https://code.google.com/apis/console/b/0/
-$key = 'AIzaSyAw29AuBbK3XtKekI5fq8JnUZLt29wZ3hA';
+$key = 'XXX';
 
 // your Google+ Activity Stream, get more info: https://developers.google.com/+/api/latest/activities
 $url = 'https://www.googleapis.com/plus/v1/people/' . $googlePlusID . '/activities/public?alt=json&pp=1&key=';
