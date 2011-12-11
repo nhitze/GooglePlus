@@ -1,12 +1,21 @@
 <?php
 // your cache file, make sure it's writable
 $cacheFile = './cache/gplus-cache';
+
 // initialise cached flag
 $cacheLoaded = false;
+
 // 30 minutes Cache Time
 $cacheTime = 1800;
+
 // a (in this case my) Google Plus ID
 $googlePlusID = '113799277735885972934';
+
+// your Google+ API key, obtain your's here https://code.google.com/apis/console/b/0/
+$key = 'AIzaSyAw29AuBbK3XtKekI5fq8JnUZLt29wZ3hA';
+
+// your Google+ Activity Stream, get more info: https://developers.google.com/+/api/latest/activities
+$url = 'https://www.googleapis.com/plus/v1/people/' . $googlePlusID . '/activities/public?alt=json&pp=1&key=';
 
 // no cachefile? generate it
 if(!file_exists($cacheFile)) {
@@ -19,18 +28,17 @@ if(!file_exists($cacheFile)) {
 } else {
 	// cache validation
 	if((time() - filemtime($cacheFile) < $cacheTime)
-	&& filesize($cacheFile)>0) {
+	&& filesize($cacheFile)>0
+	) {
 		$content = file_get_contents($cacheFile);
 		$cacheLoaded = true;
 	}
 }
 
 // no cache, reload
-if($cacheLoaded == false) {
-
-	$key = 'YOUR-API-KEY';
-	$url = 'https://www.googleapis.com/plus/v1/people/' . $googlePlusID . '/activities/public?alt=json&pp=1&key=';
-
+if($cacheLoaded == false
+|| isset($_GET['purgeCache'])) {
+ 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url.$key);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
