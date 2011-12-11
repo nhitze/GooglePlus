@@ -19,7 +19,7 @@ if(!file_exists($cacheFile)) {
 
 if($cacheLoaded == false) {
 
-	$key = 'AIzaSyAKLOkZ5kzTfGszyz4Hro0kwzZwkWQOG0E';
+	$key = 'YOUR-API-KEY';
 	$url = 'https://www.googleapis.com/plus/v1/people/113799277735885972934/activities/public?alt=json&pp=1&key=';
 
 	$ch = curl_init();
