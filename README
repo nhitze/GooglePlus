@@ -1,7 +1,6 @@
 a short DIY solution for the missing RSS feed of G+
 
-this uses SimplePie, so you will have to download it:
-http://simplepie.org/
+update: no simplepie needed
 
 No licence for my code, use what you need, make it better (easy :))
 
