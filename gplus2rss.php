@@ -35,7 +35,7 @@ if(!$gplus) die('Failed to decode G+ data');
 
 // Output RSS feed
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-echo "<rss version=\"2.00\">\n";
+echo "<rss version=\"2.00\" xmlns:geo=\"http://www.w3.org/2003/01/geo/wgs84_pos#\">\n";
 echo "<channel>\n";
 echo "  <title>".htmlspecialchars($gplus->title)."</title>\n";
 echo "  <link>http://plus.google.com/$googlePlusID</link>\n";
@@ -64,6 +64,12 @@ foreach($gplus->items as $item) {
     }
 
     echo "      <description>".htmlspecialchars($desc)."</description>\n";
+
+    if($item->geocode){
+        list($lat,$lon) = explode(" ",$item->geocode);
+        echo "    <geo:lat>$lat</geo:lat>\n";
+        echo "    <geo:long>$lon</geo:long>\n";
+    }
 
     echo "  </item>\n";
 }
