@@ -49,13 +49,6 @@ $gplus = json_decode($content);
 <description></description>
 <language>de-de</language>
 <?php
-require_once 'simplepie.inc';
-
-$feed = new SimplePie();
-$feed->set_feed_url('http://yourdomainhere.tld/gplus2rss.php');
-$feed->enable_cache(false);
-$feed->init();
-
 foreach($gplus->items as $item) { ?>
 	<item>
 	<title><?php echo $item->title; ?></title>
