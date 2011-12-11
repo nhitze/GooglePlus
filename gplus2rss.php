@@ -19,33 +19,33 @@ $url = 'https://www.googleapis.com/plus/v1/people/' . $googlePlusID . '/activiti
 
 // no cachefile? generate it
 if(!file_exists($cacheFile)) {
-	$handle = fopen($cacheFile, 'a');
-	fclose($handle);
-	if(!$handle) {
-		die('cache creation failed');
-	}
-// cache file? use it	
+    $handle = fopen($cacheFile, 'a');
+    fclose($handle);
+    if(!$handle) {
+        die('cache creation failed');
+    }
+// cache file? use it
 } else {
-	// cache validation
-	if((time() - filemtime($cacheFile) < $cacheTime)
-	&& filesize($cacheFile)>0
-	) {
-		$content = file_get_contents($cacheFile);
-		$cacheLoaded = true;
-	}
+    // cache validation
+    if((time() - filemtime($cacheFile) < $cacheTime)
+    && filesize($cacheFile)>0
+    ) {
+        $content = file_get_contents($cacheFile);
+        $cacheLoaded = true;
+    }
 }
 
 // no cache, reload
 if($cacheLoaded == false
 || isset($_GET['purgeCache'])) {
- 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $url.$key);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	$content = curl_exec($ch);
-	curl_close($ch);
-	file_put_contents($cacheFile, $content);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url.$key);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $content = curl_exec($ch);
+    curl_close($ch);
+    file_put_contents($cacheFile, $content);
 }
 $gplus = json_decode($content);
 ?>
@@ -58,13 +58,13 @@ $gplus = json_decode($content);
 <language>de-de</language>
 <?php
 foreach($gplus->items as $item) { ?>
-	<item>
-	<title><?php echo htmlspecialchars($item->title); ?></title>
-	<link><?php echo $item->url; ?></link>
-	<description>
-		<?php echo htmlspecialchars($item->object->content); ?>
-	</description>
-	</item>
+    <item>
+    <title><?php echo htmlspecialchars($item->title); ?></title>
+    <link><?php echo $item->url; ?></link>
+    <description>
+        <?php echo htmlspecialchars($item->object->content); ?>
+    </description>
+    </item>
 <?php } ?>
 
 </channel>
