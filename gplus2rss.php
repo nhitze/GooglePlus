@@ -1,4 +1,21 @@
 <?php
+// detect fopen and else use curl
+function fetchAPI($url) {
+    $content = '';
+	if(ini_get('allow_url_fopen', true)) {
+		$content = file_get_contents($url);
+	} else {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url.$key);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$content = curl_exec($ch);
+		curl_close($ch);
+	}
+
+    return $content;
+}
+
 // your cache file, make sure it's writable
 $cacheFile = '/tmp/gplus-cache';
 
@@ -22,7 +39,7 @@ if( !isset($_GET['purgeCache']) &&
     (time() - $lmod < $cacheTime)){
     $content = file_get_contents($cacheFile);
 }else{
-    $content = file_get_contents($url.$key);
+    $content = fetchAPI($url.$key);
     if($content) file_put_contents($cacheFile,$content);
 }
 if(!$content) die('Failed to load G+ data');
