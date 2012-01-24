@@ -60,14 +60,21 @@ echo "  <description></description>\n";
 echo "  <pubDate>".$gplus->updated."</pubDate>\n";
 echo "  <lastBuildDate>".$gplus->updated."</lastBuildDate>\n";
 foreach($gplus->items as $item) {
+    $object = $item->object;
     echo "  <item>\n";
     echo "      <title>".htmlspecialchars($item->title)."</title>\n";
     echo "      <link>".htmlspecialchars($item->url)."</link>\n";
     echo "      <guid>".htmlspecialchars($item->id)."</guid>\n";
+    echo "      <comments>".htmlspecialchars($object->replies->selfLink)."</comments>\n";
     echo "      <pubDate>".$item->updated."</pubDate>\n";
 
-    // we might add a source quote from attachments
-    $desc = $item->object->content;
+    if ($item->verb == 'share') {
+	$source = "<a href={$object->actor->url}><img src={$object->actor->image->url} />{$object->actor->displayName}</a>";
+	$desc = "{$item->annotation}<p>&nbsp;<br/>";
+	$desc .= "<em>$source:</em></p><blockquote>{$object->content}</blockquote>";
+    } else {
+	$desc = $item->object->content;
+    }
 
     if(isset($item->object->attachments)) foreach($item->object->attachments as $attach){
         if($attach->objectType == 'article'){
