@@ -2,7 +2,7 @@
 // detect fopen and else use curl
 function fetchAPI($url) {
     $content = '';
-	if(ini_get('allow_url_fopen', true)) {
+	if(ini_get('allow_url_fopen')==true) {
 		$content = file_get_contents($url);
 	} else {
 		$ch = curl_init();
